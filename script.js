@@ -3,9 +3,9 @@ const input = document.getElementById("textInput");
 const taskList = document.getElementById("taskList");
 
 let tasks = [
-    { id: 1, title: "Learn JavaScript", completed: true },
-    { id: 2, title: "Practice DOM", completed: false },
-    { id: 3, title: "Build Task Manager", completed: true }
+    // { id: 1, title: "Learn JavaScript", completed: true },
+    // { id: 2, title: "Practice DOM", completed: false },
+    // { id: 3, title: "Build Task Manager", completed: true }
 ];
 let currentFilter = "all";
 
@@ -39,7 +39,6 @@ function filterTasks(tasks, status){
 }
 
 function renderTasks(){
-    console.log('renderTasks');
     taskList.innerHTML = "";
  
     const ft = filterTasks(tasks, currentFilter);
@@ -47,7 +46,30 @@ function renderTasks(){
     ft.forEach(
         task =>{
             const li = document.createElement("li");
-            li.textContent = task.title;
+            const taskText = document.createElement("span");
+            const deleteButton = document.createElement("button");
+            const completeButton = document.createElement("button");
+
+            taskText.textContent = task.title;
+            deleteButton.textContent = "Delete";
+            completeButton.textContent = task.completed ? "Mark as pending" : "Mark as completed";
+
+            completeButton.addEventListener("click", () => {
+                task.completed = !task.completed;
+                renderTasks();
+            });
+
+            deleteButton.addEventListener("click", () => {
+                tasks = tasks.filter(t => t.id !== task.id);
+                renderTasks();
+            });
+
+            li.appendChild(taskText);
+            li.appendChild(completeButton);
+            li.appendChild(deleteButton);
+
+            li.classList.toggle("completed", task.completed);
+
             taskList.appendChild(li);
         }
     );
